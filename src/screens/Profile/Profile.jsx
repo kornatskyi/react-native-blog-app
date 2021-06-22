@@ -8,7 +8,9 @@ import TabViewExample from "../../components/Tabs/Tabs";
 
 import Avatar from "../../components/Avatar/Avatar";
 import { mainColor } from "../../../style";
-import Blogs from "../../components/Blogs/Blogs";
+
+import Posts from "../../components/Posts/Posts";
+
 import Photos from "../../components/Photos/Photos";
 
 export default function Profile({ navigation, extraData }) {
@@ -50,7 +52,7 @@ export default function Profile({ navigation, extraData }) {
           <Button title="Photos" />
         </View> */}
         <View style={{ flex: 1 }}>
-          <TabViewExample scenes={[Blogs, Photos]}></TabViewExample>
+          <TabViewExample scenes={[Posts, Photos]}></TabViewExample>
         </View>
       </View>
     </View>

@@ -5,7 +5,6 @@ import TabViewExample from "../../components/Tabs/Tabs";
 export default function Home({ navigation, extraData }) {
   return (
     <View style={{flex:1}}>
-      <TabViewExample></TabViewExample>
     </View>
   );
 }

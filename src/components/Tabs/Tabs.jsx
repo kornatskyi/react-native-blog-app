@@ -30,8 +30,8 @@ export default function TabViewExample({ scenes }) {
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: "first", title: "First" },
-    { key: "second", title: "Second" },
+    { key: "first", title: "Posts" },
+    { key: "second", title: "Photos" },
   ]);
 
   return (
