@@ -1,17 +1,23 @@
 import 'react-native-gesture-handler';
 import * as React from "react";
-import { View, Text, StyleSheet, StatusBar as NativeStatusBar, } from "react-native";
+import { View, Text, StyleSheet, StatusBar as NativeStatusBar, SafeAreaView, StatusBar, } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './src/screens/Home/Home.jsx'
 import Profile from './src/screens/Profile/Profile.jsx'
 import Blog from './src/screens/Blog/Blog.jsx'
 
+import { mainColor } from './style';
+
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+       <StatusBar
+        animated={true}
+        backgroundColor={mainColor}
+      />
     <NavigationContainer>
       <Stack.Navigator >
         {/* <Stack.Screen name="Home">
@@ -22,7 +28,7 @@ export default function App() {
 
       </Stack.Navigator>
     </NavigationContainer>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -30,8 +36,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: "center",
-    // justifyContent: "center",
-    marginTop: Platform.OS === "android" ? NativeStatusBar.currentHeight : 0,
+    backgroundColor:mainColor
+    // marginTop: Platform.OS === "android" ? NativeStatusBar.currentHeight : 0,
   },
 });
