@@ -20,11 +20,11 @@ export default function App() {
       />
     <NavigationContainer>
       <Stack.Navigator >
-        {/* <Stack.Screen name="Home">
-          {props => <Home {...props} extraData={"sf"} />}
-        </Stack.Screen> */}
         <Stack.Screen name="Profile" component={Profile} options={{headerShown: false}} />
-        {/* <Stack.Screen name="Blog" component={Blog} /> */}
+        <Stack.Screen name="Home">
+          {props => <Home {...props} extraData={"sf"} />}
+        </Stack.Screen>
+        <Stack.Screen name="Blog" component={Blog} />
 
       </Stack.Navigator>
     </NavigationContainer>
