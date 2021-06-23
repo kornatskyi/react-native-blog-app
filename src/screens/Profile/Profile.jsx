@@ -13,6 +13,8 @@ import Posts from "../../components/Posts/Posts";
 
 import Photos from "../../components/Photos/Photos";
 
+
+
 export default function Profile({ navigation, extraData }) {
   return (
     <View style={styles.container}>

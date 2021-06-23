@@ -1,11 +1,19 @@
-import React,{useState} from "react";
-import { ActivityIndicator, StyleSheet, View, ScrollView } from "react-native";
+import React, { useState } from "react";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  View,
+  ScrollView,
+  Modal,
+  Pressable,
+} from "react-native";
 import { Button, Text } from "react-native-elements";
 import FitImage from "react-native-fit-image";
 
-
 import Icon from "react-native-vector-icons/FontAwesome";
 import { mainColor } from "../../../style";
+
+import PostModal from "../PostModal/PostModal";
 
 export default function Posts(props) {
   return (
@@ -19,26 +27,27 @@ export default function Posts(props) {
 }
 
 const Post = ({ image, color }) => {
-    const [ modalVisible, setModalVisible ] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   return (
     <View style={{ ...styles.postContainer }}>
       <View style={styles.postHeader}>
         <Text h4 style={styles.postHeaderTitle}>
-          Headersfsadfsdfsdfsadfsddfgdfgdf
+          Header Title
         </Text>
         <Button
+        
           buttonStyle={styles.postHeaderButton}
           type="clear"
-          icon={
-            <Icon
-              name="ellipsis-v"
-              size={25}
-              color="grey"
-             
-            />
-          }
+          icon={<Icon name="ellipsis-v" size={25} color="grey" />}
+          onPress={() => setModalVisible(true)}
         ></Button>
       </View>
+
+      <PostModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
+
 
       <Text numberOfLines={7} style={styles.postBody}>
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia dolor
@@ -52,6 +61,8 @@ const Post = ({ image, color }) => {
         quam eius tempore, impedit labore dolorum magni at error quos doloremque
         porro earum nostrum repudiandae minima? minima?
       </Text>
+
+      {/***Image***/}
       <View>
         <FitImage source={image} originalWidth={400} originalHeight={200} />
       </View>
@@ -60,6 +71,7 @@ const Post = ({ image, color }) => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   postsContainer: {
@@ -83,8 +95,8 @@ const styles = StyleSheet.create({
     width: "60%",
   },
   postHeaderButton: {
-    width:45,
-    height:45,
+    width: 45,
+    height: 45,
   },
   postBody: {
     marginBottom: 5,
