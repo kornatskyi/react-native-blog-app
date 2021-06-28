@@ -5,7 +5,7 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 
 const initialLayout = { width: Dimensions.get("window").width };
 
-import { mainColor } from "../../../style";
+import { mainColor } from "../../../constants/style";
 
 const renderTabBar = (props) => (
   <TabBar

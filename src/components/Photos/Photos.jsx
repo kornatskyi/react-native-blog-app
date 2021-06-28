@@ -42,7 +42,6 @@ const Photo = (props) => {
     <View style={styles.photoContainer}>
       <TouchableOpacity
         onPress={() => {
-          console.log(source);
           setIsPhotoModal(!isPhotoModal);
         }}
       >

@@ -11,7 +11,8 @@ import { Button, Text } from "react-native-elements";
 import FitImage from "react-native-fit-image";
 
 import Icon from "react-native-vector-icons/FontAwesome";
-import { mainColor } from "../../../style";
+import { mainColor } from "../../../constants/style";
+import NewPostButton from "../NewPostButton/NewPostButton";
 
 import PostModal from "../PostModal/PostModal";
 
@@ -22,6 +23,7 @@ export default function Posts(props) {
         <Post image={require("../../../assets/images/post-image.jpg")} />
         <Post image={require("../../../assets/images/post-image.jpg")} />
       </ScrollView>
+      <NewPostButton />
     </View>
   );
 }
@@ -35,7 +37,6 @@ const Post = ({ image, color }) => {
           Header Title
         </Text>
         <Button
-        
           buttonStyle={styles.postHeaderButton}
           type="clear"
           icon={<Icon name="ellipsis-v" size={25} color="grey" />}
@@ -47,7 +48,6 @@ const Post = ({ image, color }) => {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
       />
-
 
       <Text numberOfLines={7} style={styles.postBody}>
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia dolor
@@ -71,7 +71,6 @@ const Post = ({ image, color }) => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   postsContainer: {
