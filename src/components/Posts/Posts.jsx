@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -11,30 +11,66 @@ import { Button, Text } from "react-native-elements";
 import FitImage from "react-native-fit-image";
 
 import Icon from "react-native-vector-icons/FontAwesome";
+import { API, graphqlOperation } from "aws-amplify";
+
 import { mainColor } from "../../../constants/style";
 import NewPostButton from "../NewPostButton/NewPostButton";
 
 import PostModal from "../PostModal/PostModal";
+import { listPosts } from "../../graphql/queries";
 
 export default function Posts(props) {
-  return (
-    <View>
-      <ScrollView style={styles.postsContainer}>
-        <Post image={require("../../../assets/images/post-image.jpg")} />
-        <Post image={require("../../../assets/images/post-image.jpg")} />
-      </ScrollView>
-      <NewPostButton />
-    </View>
-  );
+  const [posts, setPosts] = useState(null);
+
+  //Fetch post from GraphQL
+  async function fetchPosts() {
+    try {
+      const posts = await API.graphql(graphqlOperation(listPosts));
+      return posts;
+    } catch (err) {
+      console.warn("Error when fetching posts");
+    }
+  }
+  useEffect(() => {
+    fetchPosts().then((data) => {
+      setPosts(data.data.listPosts.items);
+    });
+  }, []);
+
+  if (!posts) {
+    return (
+      <View>
+        <Text>Posts are loading</Text>
+      </View>
+    );
+  } else {
+    return (
+      <View>
+        <ScrollView style={styles.postsContainer}>
+          {posts.map((post, i) => {
+            return (
+              <Post
+                key={i}
+                image={post.image}
+                title={post.title}
+                text={post.text}
+              />
+            );
+          })}
+        </ScrollView>
+        <NewPostButton />
+      </View>
+    );
+  }
 }
 
-const Post = ({ image, color }) => {
+const Post = ({ image, color, title, text }) => {
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <View style={{ ...styles.postContainer }}>
       <View style={styles.postHeader}>
         <Text h4 style={styles.postHeaderTitle}>
-          Header Title
+          {title}
         </Text>
         <Button
           buttonStyle={styles.postHeaderButton}
@@ -50,22 +86,19 @@ const Post = ({ image, color }) => {
       />
 
       <Text numberOfLines={7} style={styles.postBody}>
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quia dolor
-        culpa inventore ratione numquam quam eius tempore, impedit labore
-        dolorum magni at error quos doloremque porro earum nostrum repudiandae
-        minima? minima? Lorem ipsum dolor, sit amet consectetur adipisicing
-        elit. Quia dolor culpa inventore ratione numquam quam eius tempore,
-        impedit labore dolorum magni at error quos doloremque porro earum
-        nostrum repudiandae minima? minima? Lorem ipsum dolor, sit amet
-        consectetur adipisicing elit. Quia dolor culpa inventore ratione numquam
-        quam eius tempore, impedit labore dolorum magni at error quos doloremque
-        porro earum nostrum repudiandae minima? minima?
+        {text}
       </Text>
 
       {/***Image***/}
-      <View>
-        <FitImage source={image} originalWidth={400} originalHeight={200} />
-      </View>
+      {!image ? null : (
+        <View>
+          <FitImage
+            source={{ uri: image }}
+            originalWidth={400}
+            originalHeight={200}
+          />
+        </View>
+      )}
 
       <Text style={styles.postDate}>Post created 8 month ago</Text>
     </View>

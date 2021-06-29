@@ -6,6 +6,9 @@ import { useNavigation } from "@react-navigation/native";
 
 import { mainColor } from "../../../constants/style";
 
+
+
+
 export default function NewPostButton() {
   const navigation = useNavigation();
 

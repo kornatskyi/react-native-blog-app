@@ -4,27 +4,53 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
-  Text, View 
+  Text,
+  View,
 } from "react-native";
-
-
 import { AntDesign } from "@expo/vector-icons";
-import { mainColor } from "../../../constants/style";
 import { useNavigation } from "@react-navigation/native";
+import { API, graphqlOperation } from "aws-amplify";
+
+import { mainColor } from "../../../constants/style";
+import { createPost } from "../../graphql/mutations";
+
 
 export default function NewPost() {
-  const [tweet, setTweet] = useState("");
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
   const navigation = useNavigation();
 
   const onPostTweet = () => {
-    console.log("Posting the tweet:", tweet, "Image", imageUrl);
+    console.log("Posting the tweet:", title, "Image", body);
   };
 
   const closeNewTweetScreen = () => {
     navigation.goBack();
   };
+
+  const createNewPost = (title, body, image) => {
+
+    return ({
+      title: title,
+      text: body,
+      image: image,
+      userId: '0'
+    })
+      
+  }
+
+  const addPost = async (title, body, image) => {
+    try {
+        await API.graphql(graphqlOperation(createPost, {input: createNewPost(title,body, image)}))
+        console.log('Post with title "', title, '" has been posted');
+    } catch (err) {
+      console.warn('cant add new post');
+    }
+  }
+
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -37,19 +63,32 @@ export default function NewPost() {
             closeNewTweetScreen();
           }}
         ></AntDesign>
-        <TouchableOpacity style={styles.button} onPress={onPostTweet}>
+        <TouchableOpacity style={styles.button} onPress={() => {
+          
+          addPost(title, body, imageUrl)
+        }}>
           <Text style={styles.buttonText}>Post</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.newTweetContainer}>
         <View style={styles.inputContainer}>
           <TextInput
-            value={tweet}
-            onChangeText={(value) => setTweet(value)}
+            value={title}
+            onChangeText={(value) => setTitle(value)}
             multiline
-            placeholder={"What's happening?"}
-            style={styles.tweetInput}
-            numberOfLines={3}
+            placeholder={"Post title"}
+            style={styles.titleInput}
+            numberOfLines={1}
+            maxLength={50}
+          ></TextInput>
+          <TextInput
+            value={body}
+            onChangeText={(value) => setBody(value)}
+            multiline
+            placeholder={"Post body"}
+            style={styles.bodyInput}
+            numberOfLines={20}
+            maxLength={500}
           ></TextInput>
           <TextInput
             placeholder={"Image url(optional)"}
@@ -67,6 +106,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+    height: "100%",
   },
   button: {
     backgroundColor: mainColor,
@@ -91,11 +131,21 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginLeft: 10,
+    height: "100%",
   },
-  tweetInput: {
-    maxHeight: 300,
+  titleInput: {
     fontSize: 20,
     textAlignVertical: "top",
+    marginBottom: 10,
   },
-  imageInput: {},
+  bodyInput: {
+    maxHeight: 300,
+    fontSize: 16,
+    textAlignVertical: "top",
+  },
+  imageInput: {
+    position: "absolute",
+
+    bottom: 0,
+  },
 });

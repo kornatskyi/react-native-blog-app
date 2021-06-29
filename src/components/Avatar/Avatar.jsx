@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 import { Avatar, Image } from "react-native-elements";
 
 export default ({source, style}) => {
-console.log(style);
   return (
     <Image style={style} source={source}>
 
