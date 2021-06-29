@@ -12,6 +12,8 @@ import {
 import FitImage from "react-native-fit-image";
 import PhotoModal from "../PhotoView/PhotoModal";
 
+import AddPhotoButton from "../AddPhotoButton/AddPhotoButton";
+
 const sources = [
   require("../../../assets/images/pexels-bianca-723679.jpg"),
   require("../../../assets/images/pexels-emre-keshavarz-7232212.jpg"),
@@ -27,11 +29,14 @@ const sources = [
 
 export default function Photos() {
   return (
-    <ScrollView contentContainerStyle={styles.photosContainer}>
-      {sources.map((source, i) => {
-        return <Photo key={i} source={source} />;
-      })}
-    </ScrollView>
+    <View>
+      <ScrollView contentContainerStyle={styles.photosContainer}>
+        {sources.map((source, i) => {
+          return <Photo key={i} source={source} />;
+        })}
+      </ScrollView>
+      <AddPhotoButton />
+    </View>
   );
 }
 
