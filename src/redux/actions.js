@@ -64,8 +64,8 @@ export const editPostSync = (editedPost) => (dispatch) => {
     return (
         async () => {
             try {
-                await API.graphql(graphqlOperation(updatePost, { input:  editedPost  }))
-                dispatch(editPostInStore(editedPost));
+                const post = await API.graphql(graphqlOperation(updatePost, { input: editedPost }))
+                dispatch(editPostInStore(post.data.updatePost));
             } catch (err) {
                 console.error(err)
                 console.log('cant delete post');

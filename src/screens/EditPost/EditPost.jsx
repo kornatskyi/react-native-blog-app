@@ -18,6 +18,7 @@ import { editPostSync } from "../../redux/actions";
 
 export default function EditPost({ navigation, route }) {
   const postData = route.params.postData;
+  console.log("🚀 ~ postData", postData)
 
 
   const [title, setTitle] = useState(postData.title);
@@ -31,8 +32,9 @@ export default function EditPost({ navigation, route }) {
     navigation.goBack();
   };
 
-  const createNewPost = (title, body, image) => {
+  const createEditedPost = (title, body, image, id) => {
     return {
+      id: id,
       title: title,
       text: body,
       image: image,
@@ -55,7 +57,7 @@ export default function EditPost({ navigation, route }) {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            dispatch(editPostSync(createNewPost(title, body, imageUrl)));
+            dispatch(editPostSync(createEditedPost(title, body, imageUrl, postData.id)));
             closeEditTweetScreen();
           }}
         >

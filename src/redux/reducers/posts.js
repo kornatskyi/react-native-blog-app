@@ -20,6 +20,7 @@ const postsReducer = createReducer(initialState, (builder) => {
             })
         })
         .addCase(EDIT_POST, (state, action) => {
+            
             state.posts.forEach((post, i) => {
                 if (post.id === action.payload.id) {
                     state.posts[i] = action.payload
