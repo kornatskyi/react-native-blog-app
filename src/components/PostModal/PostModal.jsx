@@ -13,23 +13,21 @@ import Amplify, { Auth, API, graphqlOperation } from "aws-amplify";
 
 import { deletePostSync } from "../../redux/actions";
 import { useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
-export default function PostModal({ modalVisible, setModalVisible, postId }) {
+export default function PostModal({
+  modalVisible,
+  setModalVisible,
+  postId,
+  postData,
+}) {
   const dispatch = useDispatch();
 
-  async function removePost() {
-    try {
-      await API.graphql(
-        graphqlOperation(deletePost, { input: { id: postId } })
-      );
-      console.log("post deleted");
-    } catch (err) {
-      console.log("Can't delete post");
-    }
-  }
-  async function editPost() {
-    console.log("Here should be a function for post editing");
-  }
+  const navigation = useNavigation();
+
+  const navigateToEditPost = (postdata) => {
+    navigation.navigate("EditPost", { postData: postdata });
+  };
 
   return (
     <View style={{ position: "absolute" }}>
@@ -61,7 +59,7 @@ export default function PostModal({ modalVisible, setModalVisible, postId }) {
               icon="edit"
               title="Edit post"
               func={() => {
-                editPost();
+                navigateToEditPost(postData);
               }}
             />
           </View>

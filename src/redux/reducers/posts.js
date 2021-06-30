@@ -1,4 +1,4 @@
-import { STORE_POSTS, ADD_POST, DELETE_POST } from "../actionTypes";
+import { STORE_POSTS, ADD_POST, DELETE_POST, EDIT_POST } from "../actionTypes";
 import { createReducer } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -18,6 +18,15 @@ const postsReducer = createReducer(initialState, (builder) => {
             state.posts = state.posts.filter(post => {
                 return post.id !== action.payload
             })
+        })
+        .addCase(EDIT_POST, (state, action) => {
+            state.posts.forEach((post, i) => {
+                if (post.id === action.payload.id) {
+                    state.posts[i] = action.payload
+                }
+               
+            })
+            
         })
 })
 

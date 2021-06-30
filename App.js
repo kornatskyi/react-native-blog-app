@@ -8,6 +8,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Home from "./src/screens/Home/Home.jsx";
 import Profile from "./src/screens/Profile/Profile.jsx";
 import Blog from "./src/screens/Blog/Blog.jsx";
+import NewPost from "./src/screens/NewPost/NewPost.jsx";
+import EditPost from "./src/screens/EditPost/EditPost.jsx";
 //Styles
 import { mainColor } from "./constants/style";
 
@@ -23,7 +25,6 @@ import Amplify, {
 } from "aws-amplify";
 
 import { withAuthenticator } from 'aws-amplify-react-native'
-import NewPost from "./src/screens/NewPost/NewPost.jsx";
 import config from "./src/aws-exports";
 import { getUser } from "./src/graphql/queries";
 import { createUser } from "./src/graphql/mutations";
@@ -98,6 +99,11 @@ function App() {
             <Stack.Screen
               name="NewPost"
               component={NewPost}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="EditPost"
+              component={EditPost}
               options={{ headerShown: false }}
             />
             <Stack.Screen name="Home">

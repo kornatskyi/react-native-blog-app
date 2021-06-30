@@ -14,20 +14,20 @@ import { mainColor } from "../../../constants/style";
 
 //Redux
 import { useDispatch } from "react-redux";
-import { postPost } from "../../redux/actions";
+import { editPostSync } from "../../redux/actions";
 
-//Amplify related
+export default function EditPost({ navigation, route }) {
+  const postData = route.params.postData;
 
-export default function NewPost() {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
 
+  const [title, setTitle] = useState(postData.title);
+  const [body, setBody] = useState(postData.text);
+  const [imageUrl, setImageUrl] = useState(postData.image);
+
+  
   const dispatch = useDispatch();
 
-  const navigation = useNavigation();
-
-  const closeNewTweetScreen = () => {
+  const closeEditTweetScreen = () => {
     navigation.goBack();
   };
 
@@ -40,6 +40,7 @@ export default function NewPost() {
     };
   };
 
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
@@ -48,14 +49,14 @@ export default function NewPost() {
           size={30}
           color={mainColor}
           onPress={() => {
-            closeNewTweetScreen();
+            closeEditTweetScreen();
           }}
         ></AntDesign>
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            dispatch(postPost(createNewPost(title, body, imageUrl)));
-            closeNewTweetScreen();
+            dispatch(editPostSync(createNewPost(title, body, imageUrl)));
+            closeEditTweetScreen();
           }}
         >
           <Text style={styles.buttonText}>Post</Text>

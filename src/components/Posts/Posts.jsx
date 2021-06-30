@@ -10,6 +10,7 @@ import {
 import { Button, Text } from "react-native-elements";
 import FitImage from "react-native-fit-image";
 import Icon from "react-native-vector-icons/FontAwesome";
+import moment from "moment";
 
 //Custom componens
 import NewPostButton from "../NewPostButton/NewPostButton";
@@ -77,8 +78,7 @@ export default function Posts(props) {
 
 const Post = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const { image, title, text, postId } = props.postData;
-  console.log(props.postData);
+  const { image, title, text, id, createdAt } = props.postData;
 
   return (
     <View style={{ ...styles.postContainer }}>
@@ -95,7 +95,8 @@ const Post = (props) => {
       </View>
 
       <PostModal
-        postId={postId}
+        postId={id}
+        postData={props.postData}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
       />
@@ -115,7 +116,7 @@ const Post = (props) => {
         </View>
       )}
 
-      <Text style={styles.postDate}>Post created 8 month ago</Text>
+      <Text style={styles.postDate}>{moment(createdAt).fromNow()}</Text>
     </View>
   );
 };
