@@ -9,14 +9,16 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { API, graphqlOperation } from "aws-amplify";
 
 import { mainColor } from "../../../constants/style";
-import { createPost } from "../../graphql/mutations";
 
 //Redux
 import { useSelector, useDispatch } from "react-redux";
-import { addPost as addPostAction } from "../../redux/actions";
+import { addPost as addPostAction, postPost } from "../../redux/actions";
+
+//Amplify related
+import { API, graphqlOperation } from "aws-amplify";
+import { createPost } from "../../graphql/mutations";
 
 export default function NewPost() {
   const [title, setTitle] = useState("");
@@ -40,18 +42,18 @@ export default function NewPost() {
     };
   };
 
-  const addPost = async (title, body, image) => {
-    const newPost = createNewPost(title, body, image);
-    try {
-      await API.graphql(graphqlOperation(createPost, { input: newPost }));
-      console.log('Post with title "', title, '" has been added to the db');
+  // const addPost = async (title, body, image) => {
+  //   const newPost = createNewPost(title, body, image);
+  //   try {
+  //     await API.graphql(graphqlOperation(createPost, { input: newPost }));
+  //     console.log('Post with title "', title, '" has been added to the db');
 
-      dispatch(addPostAction(newPost));
-      console.log('Post with title "', title, '" has been added to the db');
-    } catch (err) {
-      console.warn("cant add new post");
-    }
-  };
+  //     dispatch(addPostAction(newPost));
+  //     console.log('Post with title "', title, '" has been added to the db');
+  //   } catch (err) {
+  //     console.warn("cant add new post");
+  //   }
+  // };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -67,7 +69,7 @@ export default function NewPost() {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            addPost(title, body, imageUrl);
+            dispatch(postPost(createNewPost(title, body, imageUrl)));
             closeNewTweetScreen();
           }}
         >
