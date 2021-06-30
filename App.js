@@ -15,7 +15,8 @@ import { mainColor } from "./constants/style";
 
 //Redux
 import { configureStore } from "./src/redux/store.js";
-import { Provider } from 'react-redux'
+import { Provider, useDispatch } from 'react-redux'
+import { storeUser, storeUserAsync } from "./src/redux/actions.js";
 
 //Amplify related
 import Amplify, {
@@ -52,41 +53,15 @@ function App() {
     await API.graphql(graphqlOperation(createUser, { input: user }));
   };
 
-  useEffect(() => {
-    const updateUser = async () => {
-      // Get current authenticated user
+  const dispatch = useDispatch()
 
-      const userInfo = await Auth.currentAuthenticatedUser({
-        bypassCache: true,
-      });
 
-      if (userInfo) {
-        // Check if user already exists in database
-        const userData = await API.graphql(
-          graphqlOperation(getUser, { id: userInfo.attributes.sub })
-        );
-
-        if (!userData.data.getUser) {
-          const user = {
-            id: userInfo.attributes.sub,
-            name: userInfo.username,
-            email: userInfo.attributes.email,
-            image: getRandomImage(),
-          };
-          saveUserToDB(user);
-        } else {
-          console.log("User already exist!");
-        }
-      }
-
-      // If it doesn't, create the user in the database
-    };
-    updateUser();
+  useEffect(() => { 
+        dispatch(storeUserAsync())
   }, []);
 
 
   return (
-    <Provider store={store}>
       <SafeAreaView style={styles.container}>
         <StatusBar animated={true} backgroundColor={mainColor} />
         <NavigationContainer>
@@ -113,9 +88,10 @@ function App() {
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaView>
-    </Provider>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -125,5 +101,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withAuthenticator(App)
+
+function ReduxProviderWrapper() {
+  return (
+    <Provider store={store}>
+      <App/>
+    </Provider>
+  )
+}
+
+export default withAuthenticator(ReduxProviderWrapper)
 

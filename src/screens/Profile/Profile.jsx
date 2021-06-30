@@ -1,20 +1,14 @@
-import React, { useState } from "react";
-import { View, Button, StyleSheet, useWindowDimensions } from "react-native";
-import { Text } from "react-native-elements";
+import React from "react";
+import { View, StyleSheet } from "react-native";
 
-import { TabView, SceneMap } from "react-native-tab-view";
 
 import TabViewExample from "../../components/Tabs/Tabs";
-
-import Avatar from "../../components/Avatar/Avatar";
-import { mainColor } from "../../../constants/style";
 
 import Posts from "../../components/Posts/Posts";
 
 import Photos from "../../components/Photos/Photos";
 
 import ProfileHeader from "../../components/ProfileHeader/ProfileHeader";
-import NewPostButton from "../../components/NewPostButton/NewPostButton";
 
 export default function Profile({ navigation, extraData }) {
   return (

@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { mainColor } from "../../../constants/style";
 
 //Redux
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { postPost } from "../../redux/actions";
 
 //Amplify related
@@ -31,12 +31,14 @@ export default function NewPost() {
     navigation.goBack();
   };
 
-  const createNewPost = (title, body, image) => {
+  const userId = useSelector((state) => state.user.user.id);
+
+  const createNewPost = (title, body, image, userId) => {
     return {
       title: title,
       text: body,
       image: image,
-      userId: "0",
+      userId: userId,
     };
   };
 
@@ -54,7 +56,7 @@ export default function NewPost() {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            dispatch(postPost(createNewPost(title, body, imageUrl)));
+            dispatch(postPost(createNewPost(title, body, imageUrl, userId)));
             closeNewTweetScreen();
           }}
         >

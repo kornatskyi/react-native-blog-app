@@ -1,20 +1,70 @@
 import * as actionTypes from './actionTypes'
 
 //Amplify related
-import { API, graphqlOperation } from "aws-amplify";
+import { API, graphqlOperation, Auth } from "aws-amplify";
 import { createPost, deletePost, updatePost } from "../graphql/mutations";
+import { listPosts, getUser } from '../graphql/queries';
 
-export function storePosts(payload) {
+
+/***  Actions  ***/
+
+//User Actions
+export function storeUser(user) {
     return ({
-        type: actionTypes.STORE_POSTS,
-        payload: payload
+        type: actionTypes.STORE_USER,
+        payload: user
     })
 }
+
+//Posts actions
+export function storePosts(posts) {
+    return ({
+        type: actionTypes.STORE_POSTS,
+        payload: posts
+    })
+}
+
 export function addPost(post) {
     return ({
         type: actionTypes.ADD_POST,
         payload: post
     })
+}
+export function deletePostFromStore(id) {
+    return ({
+        type: actionTypes.DELETE_POST,
+        payload: id
+    })
+}
+export function editPostInStore(editedPost) {
+    return ({
+        type: actionTypes.EDIT_POST,
+        payload: editedPost
+    })
+}
+
+//Middleware
+
+
+//Posts Middleware
+export const fetchPosts = (userId) => (dispatch) => {
+
+    return (
+        async () => {
+            try {
+                const posts = await API.graphql(graphqlOperation(listPosts, {
+                    filter: {
+                        userId:
+                            { contains: userId }
+                    }
+                }))
+                dispatch(storePosts(posts.data.listPosts.items))
+            } catch (err) {
+
+                console.log('error when fetching posts');
+            }
+        }
+    )()
 }
 
 export const postPost = (postData) => (dispatch) => {
@@ -31,14 +81,6 @@ export const postPost = (postData) => (dispatch) => {
     )()
 }
 
-
-export function deletePostFromStore(id) {
-    return ({
-        type: actionTypes.DELETE_POST,
-        payload: id
-    })
-}
-
 export const deletePostSync = (id) => (dispatch) => {
     return (
         async () => {
@@ -51,13 +93,6 @@ export const deletePostSync = (id) => (dispatch) => {
             }
         }
     )()
-}
-
-export function editPostInStore(editedPost) {
-    return ({
-        type: actionTypes.EDIT_POST,
-        payload: editedPost
-    })
 }
 
 export const editPostSync = (editedPost) => (dispatch) => {
@@ -74,4 +109,49 @@ export const editPostSync = (editedPost) => (dispatch) => {
     )()
 }
 
+
+
+//User middleware
+export const storeUserAsync = (user) => (dispatch) => {
+
+    return (
+        async () => {
+            try {
+                const userInfo = await Auth.currentAuthenticatedUser({
+                    bypassCache: true,
+                });
+
+
+
+
+                if (userInfo) {
+                    // Check if user already exists in database
+                    const userData = await API.graphql(
+                        graphqlOperation(getUser, { id: userInfo.attributes.sub })
+                    );
+                    //Store user to the redux store
+                    dispatch(storeUser(userData.data.getUser))
+                    if (!userData.data.getUser) {
+                        const user = {
+                            id: userInfo.attributes.sub,
+                            name: userInfo.username,
+                            email: userInfo.attributes.email,
+                            image: getRandomImage(),
+                        };
+                        saveUserToDB(user);
+                    } else {
+                        console.log("User already exist!");
+                    }
+                }
+
+            } catch (err) {
+                console.log("🚀 ~ err", err)
+                console.log('error when saving user');
+
+            }
+        }
+    )()
+
+
+}
 

@@ -17,13 +17,13 @@ import NewPostButton from "../NewPostButton/NewPostButton";
 import PostModal from "../PostModal/PostModal";
 //Styles
 import { mainColor } from "../../../constants/style";
-//Amplify related
-import { listPosts } from "../../graphql/queries";
-import { API, graphqlOperation } from "aws-amplify";
+// //Amplify related
+// import { listPosts } from "../../graphql/queries";
+// import { API, graphqlOperation } from "aws-amplify";
 
 //Redux
 import { useSelector, useDispatch } from "react-redux";
-import { storePosts } from "../../redux/actions";
+import { fetchPosts } from "../../redux/actions";
 
 export default function Posts(props) {
   // const [posts, setPosts] = useState(null);
@@ -31,23 +31,15 @@ export default function Posts(props) {
   const posts = useSelector((state) => {
     return state.posts.posts;
   });
+  const userId = useSelector(state => state.user.user.id)
+  console.log("🚀 ~ posts", posts)
   const dispatch = useDispatch();
 
   //Fetch post from GraphQL
-  async function fetchPosts() {
-    try {
-      const posts = await API.graphql(graphqlOperation(listPosts));
 
-      return posts;
-    } catch (err) {
-      console.warn("Error when fetching posts");
-    }
-  }
 
   useEffect(() => {
-    fetchPosts().then((data) => {
-      dispatch(storePosts(data.data.listPosts.items));
-    });
+    dispatch(fetchPosts(userId))
   }, []);
 
   if (!posts) {
