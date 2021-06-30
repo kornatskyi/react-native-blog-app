@@ -16,12 +16,11 @@ import { deletePost } from "../../graphql/mutations";
 export default function PostModal({ modalVisible, setModalVisible, postId }) {
   async function removePost() {
     try {
-      await API.graphql(graphqlOperation(deletePost, { input: {id: postId} }));
+      await API.graphql(
+        graphqlOperation(deletePost, { input: { id: postId } })
+      );
       console.log("post deleted");
     } catch (err) {
-      console.log('====================================');
-      console.log(err);
-      console.log('====================================');
       console.log("Can't delete post");
     }
   }
@@ -52,6 +51,8 @@ export default function PostModal({ modalVisible, setModalVisible, postId }) {
               title="Delete post"
               func={() => {
                 removePost();
+                setModalVisible(!modalVisible);
+
               }}
             />
             <ModalPressable

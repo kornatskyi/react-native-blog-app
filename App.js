@@ -3,28 +3,44 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, SafeAreaView, StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import Amplify, { Auth, API, graphqlOperation } from "aws-amplify";
-import { withAuthenticator } from 'aws-amplify-react-native'
 
-
+//Components
 import Home from "./src/screens/Home/Home.jsx";
 import Profile from "./src/screens/Profile/Profile.jsx";
 import Blog from "./src/screens/Blog/Blog.jsx";
+//Styles
 import { mainColor } from "./constants/style";
+
+//Redux
+import store from './src/redux/store'
+import { Provider } from 'react-redux'
+
+//Amplify related
+import Amplify, {
+  Auth,
+  API,
+  graphqlOperation
+} from "aws-amplify";
+
+import { withAuthenticator } from 'aws-amplify-react-native'
 import NewPost from "./src/screens/NewPost/NewPost.jsx";
 import config from "./src/aws-exports";
 import { getUser } from "./src/graphql/queries";
 import { createUser } from "./src/graphql/mutations";
 
 
+Amplify.configure({
+  ...config,
+  Analytics: {
+    disabled: true,
+  }
+});
 
-Amplify.configure(config);
+
+
+
 
 const Stack = createStackNavigator();
-
-
-
-
 
 function App() {
 
@@ -69,27 +85,29 @@ function App() {
 
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar animated={true} backgroundColor={mainColor} />
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Profile"
-            component={Profile}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="NewPost"
-            component={NewPost}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="Home">
-            {(props) => <Home {...props} extraData={"sf"} />}
-          </Stack.Screen>
-          <Stack.Screen name="Blog" component={Blog} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
+    <Provider store={store}>
+      <SafeAreaView style={styles.container}>
+        <StatusBar animated={true} backgroundColor={mainColor} />
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Profile"
+              component={Profile}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="NewPost"
+              component={NewPost}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="Home">
+              {(props) => <Home {...props} extraData={"sf"} />}
+            </Stack.Screen>
+            <Stack.Screen name="Blog" component={Blog} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    </Provider>
   );
 }
 

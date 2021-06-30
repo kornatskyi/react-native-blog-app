@@ -22,10 +22,7 @@ export default function NewPost() {
 
   const navigation = useNavigation();
 
-  const onPostTweet = () => {
-    console.log("Posting the tweet:", title, "Image", body);
-  };
-
+  
   const closeNewTweetScreen = () => {
     navigation.goBack();
   };
@@ -61,11 +58,14 @@ export default function NewPost() {
           color={mainColor}
           onPress={() => {
             closeNewTweetScreen();
+            
           }}
         ></AntDesign>
         <TouchableOpacity style={styles.button} onPress={() => {
-          
-          addPost(title, body, imageUrl)
+          addPost(title, body, imageUrl);
+          closeNewTweetScreen();
+
+
         }}>
           <Text style={styles.buttonText}>Post</Text>
         </TouchableOpacity>

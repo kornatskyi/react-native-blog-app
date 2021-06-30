@@ -9,18 +9,31 @@ import {
 } from "react-native";
 import { Button, Text } from "react-native-elements";
 import FitImage from "react-native-fit-image";
-
 import Icon from "react-native-vector-icons/FontAwesome";
+
+//Custom componens
+import NewPostButton from "../NewPostButton/NewPostButton";
+import PostModal from "../PostModal/PostModal";
+//Styles
+import { mainColor } from "../../../constants/style";
+//Amplify related
+import { listPosts } from "../../graphql/queries";
 import { API, graphqlOperation } from "aws-amplify";
 
-import { mainColor } from "../../../constants/style";
-import NewPostButton from "../NewPostButton/NewPostButton";
-
-import PostModal from "../PostModal/PostModal";
-import { listPosts } from "../../graphql/queries";
+//Redux
+import { useSelector, useDispatch } from 'react-redux'
+import { storePosts } from "../../redux/actions";
 
 export default function Posts(props) {
   const [posts, setPosts] = useState(null);
+
+  const reduxPosts = useSelector((state) => state.posts);
+  const dispatch = useDispatch();
+
+
+  console.log(posts);
+
+
 
   //Fetch post from GraphQL
   async function fetchPosts() {
@@ -85,6 +98,7 @@ const Post = ({ image, color, title, text, postId }) => {
         postId={postId}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        
       />
 
       <Text numberOfLines={7} style={styles.postBody}>
