@@ -54,6 +54,7 @@ export default function Posts(props) {
                 image={post.image}
                 title={post.title}
                 text={post.text}
+                postId={post.id}
               />
             );
           })}
@@ -64,7 +65,7 @@ export default function Posts(props) {
   }
 }
 
-const Post = ({ image, color, title, text }) => {
+const Post = ({ image, color, title, text, postId }) => {
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <View style={{ ...styles.postContainer }}>
@@ -81,6 +82,7 @@ const Post = ({ image, color, title, text }) => {
       </View>
 
       <PostModal
+        postId={postId}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
       />

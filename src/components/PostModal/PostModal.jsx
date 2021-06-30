@@ -8,10 +8,27 @@ import {
   View,
 } from "react-native";
 import { Button, Text } from "react-native-elements";
-
 import Icon from "react-native-vector-icons/FontAwesome";
+import Amplify, { Auth, API, graphqlOperation } from "aws-amplify";
 
-export default function PostModal({ modalVisible, setModalVisible }) {
+import { deletePost } from "../../graphql/mutations";
+
+export default function PostModal({ modalVisible, setModalVisible, postId }) {
+  async function removePost() {
+    try {
+      await API.graphql(graphqlOperation(deletePost, { input: {id: postId} }));
+      console.log("post deleted");
+    } catch (err) {
+      console.log('====================================');
+      console.log(err);
+      console.log('====================================');
+      console.log("Can't delete post");
+    }
+  }
+  async function editPost() {
+    console.log("Here should be a function for post editing");
+  }
+
   return (
     <View style={{ position: "absolute" }}>
       <Modal
@@ -34,14 +51,14 @@ export default function PostModal({ modalVisible, setModalVisible }) {
               icon="trash"
               title="Delete post"
               func={() => {
-                console.log("Here should be a function for post deletion");
+                removePost();
               }}
             />
             <ModalPressable
               icon="edit"
               title="Edit post"
               func={() => {
-                console.log("Here should be a function for post editing");
+                editPost();
               }}
             />
           </View>
