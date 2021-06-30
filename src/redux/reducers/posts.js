@@ -15,7 +15,9 @@ const postsReducer = createReducer(initialState, (builder) => {
             state.posts.push(action.payload)
         })
         .addCase(DELETE_POST, (state, action) => {
-            state.posts.filter(post => post.id !== action.payload)
+            state.posts = state.posts.filter(post => {
+                return post.id !== action.payload
+            })
         })
 })
 

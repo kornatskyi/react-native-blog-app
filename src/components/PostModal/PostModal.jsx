@@ -11,9 +11,12 @@ import { Button, Text } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Amplify, { Auth, API, graphqlOperation } from "aws-amplify";
 
-import { deletePost } from "../../graphql/mutations";
+import { deletePostSync } from "../../redux/actions";
+import { useDispatch } from "react-redux";
 
 export default function PostModal({ modalVisible, setModalVisible, postId }) {
+  const dispatch = useDispatch();
+
   async function removePost() {
     try {
       await API.graphql(
@@ -50,9 +53,8 @@ export default function PostModal({ modalVisible, setModalVisible, postId }) {
               icon="trash"
               title="Delete post"
               func={() => {
-                removePost();
+                dispatch(deletePostSync(postId));
                 setModalVisible(!modalVisible);
-
               }}
             />
             <ModalPressable

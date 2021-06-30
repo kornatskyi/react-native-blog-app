@@ -28,12 +28,9 @@ export default function Posts(props) {
   // const [posts, setPosts] = useState(null);
 
   const posts = useSelector((state) => {
-    console.log(state.posts.posts);
     return state.posts.posts;
   });
   const dispatch = useDispatch();
-
-  console.log(posts);
 
   //Fetch post from GraphQL
   async function fetchPosts() {
@@ -45,9 +42,9 @@ export default function Posts(props) {
       console.warn("Error when fetching posts");
     }
   }
+
   useEffect(() => {
     fetchPosts().then((data) => {
-      // setPosts(data.data.listPosts.items);
       dispatch(storePosts(data.data.listPosts.items));
     });
   }, []);
@@ -66,10 +63,8 @@ export default function Posts(props) {
             return (
               <Post
                 key={i}
-                image={post.image}
-                title={post.title}
-                text={post.text}
-                postId={post.id}
+                postData={post}
+    
               />
             );
           })}
@@ -80,8 +75,11 @@ export default function Posts(props) {
   }
 }
 
-const Post = ({ image, color, title, text, postId }) => {
+const Post = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const { image, title, text, postId } = props.postData;
+  console.log(props.postData);
+
   return (
     <View style={{ ...styles.postContainer }}>
       <View style={styles.postHeader}>

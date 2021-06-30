@@ -42,19 +42,6 @@ export default function NewPost() {
     };
   };
 
-  // const addPost = async (title, body, image) => {
-  //   const newPost = createNewPost(title, body, image);
-  //   try {
-  //     await API.graphql(graphqlOperation(createPost, { input: newPost }));
-  //     console.log('Post with title "', title, '" has been added to the db');
-
-  //     dispatch(addPostAction(newPost));
-  //     console.log('Post with title "', title, '" has been added to the db');
-  //   } catch (err) {
-  //     console.warn("cant add new post");
-  //   }
-  // };
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>

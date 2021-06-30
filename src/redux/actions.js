@@ -2,7 +2,7 @@ import * as actionTypes from './actionTypes'
 
 //Amplify related
 import { API, graphqlOperation } from "aws-amplify";
-import { createPost } from "../graphql/mutations";
+import { createPost, deletePost } from "../graphql/mutations";
 
 export function storePosts(payload) {
     return ({
@@ -17,14 +17,12 @@ export function addPost(post) {
     })
 }
 
-export const postPost = (post) => (dispatch) => {
+export const postPost = (postData) => (dispatch) => {
     return (
         async () => {
             try {
-                await API.graphql(graphqlOperation(createPost, { input: post }))
-                console.log('Post with title "', post.title, '" has been added to the db');
-                dispatch(addPost(post));
-                console.log('Post with title "', post.title, '" has been added to the redux store');
+                const post = await API.graphql(graphqlOperation(createPost, { input: postData }));
+                dispatch(addPost(post.data.createPost));
             } catch (err) {
                 console.log(err);
                 console.log('cant add new post');
@@ -34,9 +32,23 @@ export const postPost = (post) => (dispatch) => {
 }
 
 
-export function deletePost(payload) {
+export function deletePostFromStore(id) {
     return ({
         type: actionTypes.DELETE_POST,
-        payload: payload
+        payload: id
     })
+}
+
+export const deletePostSync = (id) => (dispatch) => {
+    return (
+        async () => {
+            try {
+                await API.graphql(graphqlOperation(deletePost, { input: { id: id } }))
+                dispatch(deletePostFromStore(id));
+            } catch (err) {
+                console.error(err)
+                console.log('cant delete post');
+            }
+        }
+    )()
 }
