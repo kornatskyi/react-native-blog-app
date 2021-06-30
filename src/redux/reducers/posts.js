@@ -2,7 +2,7 @@ import { STORE_POSTS, ADD_POST, DELETE_POST } from "../actionTypes";
 import { createReducer } from "@reduxjs/toolkit";
 
 const initialState = {
-    posts: []
+    posts: null
 };
 
 //using createReducer to simplify code. it makes possible to write mutable code

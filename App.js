@@ -12,7 +12,7 @@ import Blog from "./src/screens/Blog/Blog.jsx";
 import { mainColor } from "./constants/style";
 
 //Redux
-import store from './src/redux/store'
+import { configureStore } from "./src/redux/store.js";
 import { Provider } from 'react-redux'
 
 //Amplify related
@@ -39,7 +39,7 @@ Amplify.configure({
 
 
 
-
+const store = configureStore();
 const Stack = createStackNavigator();
 
 function App() {

@@ -1,8 +1,16 @@
-import { configureStore } from '@reduxjs/toolkit'
 import postsReducer from './reducers/posts'
+import thunk from 'redux-thunk'
+import { applyMiddleware, createStore, combineReducers } from 'redux'
 
-export default configureStore({
-  reducer: {
-   posts:postsReducer
-  }
-})
+
+
+export const configureStore = () => {
+  const store = createStore(
+    combineReducers({
+      posts: postsReducer
+    }),
+    applyMiddleware(thunk)
+  )
+  return store;
+}
+

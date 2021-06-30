@@ -21,24 +21,25 @@ import { listPosts } from "../../graphql/queries";
 import { API, graphqlOperation } from "aws-amplify";
 
 //Redux
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
 import { storePosts } from "../../redux/actions";
 
 export default function Posts(props) {
-  const [posts, setPosts] = useState(null);
+  // const [posts, setPosts] = useState(null);
 
-  const reduxPosts = useSelector((state) => state.posts);
+  const posts = useSelector((state) => {
+    console.log(state.posts.posts);
+    return state.posts.posts;
+  });
   const dispatch = useDispatch();
 
-
   console.log(posts);
-
-
 
   //Fetch post from GraphQL
   async function fetchPosts() {
     try {
       const posts = await API.graphql(graphqlOperation(listPosts));
+
       return posts;
     } catch (err) {
       console.warn("Error when fetching posts");
@@ -46,7 +47,8 @@ export default function Posts(props) {
   }
   useEffect(() => {
     fetchPosts().then((data) => {
-      setPosts(data.data.listPosts.items);
+      // setPosts(data.data.listPosts.items);
+      dispatch(storePosts(data.data.listPosts.items));
     });
   }, []);
 
@@ -98,7 +100,6 @@ const Post = ({ image, color, title, text, postId }) => {
         postId={postId}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        
       />
 
       <Text numberOfLines={7} style={styles.postBody}>

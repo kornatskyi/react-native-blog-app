@@ -14,40 +14,44 @@ import { API, graphqlOperation } from "aws-amplify";
 import { mainColor } from "../../../constants/style";
 import { createPost } from "../../graphql/mutations";
 
+//Redux
+import { useSelector, useDispatch } from "react-redux";
+import { addPost as addPostAction } from "../../redux/actions";
 
 export default function NewPost() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
+  const dispatch = useDispatch();
+
   const navigation = useNavigation();
 
-  
   const closeNewTweetScreen = () => {
     navigation.goBack();
   };
 
   const createNewPost = (title, body, image) => {
-
-    return ({
+    return {
       title: title,
       text: body,
       image: image,
-      userId: '0'
-    })
-      
-  }
+      userId: "0",
+    };
+  };
 
   const addPost = async (title, body, image) => {
+    const newPost = createNewPost(title, body, image);
     try {
-        await API.graphql(graphqlOperation(createPost, {input: createNewPost(title,body, image)}))
-        console.log('Post with title "', title, '" has been posted');
+      await API.graphql(graphqlOperation(createPost, { input: newPost }));
+      console.log('Post with title "', title, '" has been added to the db');
+
+      dispatch(addPostAction(newPost));
+      console.log('Post with title "', title, '" has been added to the db');
     } catch (err) {
-      console.warn('cant add new post');
+      console.warn("cant add new post");
     }
-  }
-
-
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -58,15 +62,15 @@ export default function NewPost() {
           color={mainColor}
           onPress={() => {
             closeNewTweetScreen();
-            
           }}
         ></AntDesign>
-        <TouchableOpacity style={styles.button} onPress={() => {
-          addPost(title, body, imageUrl);
-          closeNewTweetScreen();
-
-
-        }}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            addPost(title, body, imageUrl);
+            closeNewTweetScreen();
+          }}
+        >
           <Text style={styles.buttonText}>Post</Text>
         </TouchableOpacity>
       </View>
