@@ -4,7 +4,7 @@ import * as actionTypes from './actionTypes'
 import { API, graphqlOperation, Auth } from "aws-amplify";
 import { createPost, deletePost, updatePost } from "../graphql/mutations";
 import { listPosts, getUser } from '../graphql/queries';
-
+import { createUser } from '../graphql/mutations';
 
 /***  Actions  ***/
 
@@ -119,24 +119,28 @@ export const storeUserAsync = () => (dispatch) => {
                 const userInfo = await Auth.currentAuthenticatedUser({
                     bypassCache: true,
                 });
+                
                 if (userInfo) {
                     // Check if user already exists in database
                     const userData = await API.graphql(
                         graphqlOperation(getUser, { id: userInfo.attributes.sub })
                     );
-                    //Store user to the redux store
-                    dispatch(storeUser(userData.data.getUser))
+                    console.log("🚀 ~ userData", userData)
+
                     if (!userData.data.getUser) {
                         const user = {
                             id: userInfo.attributes.sub,
                             name: userInfo.username,
                             email: userInfo.attributes.email,
-                            image: getRandomImage(),
+                            image: 'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png',
                         };
-                        saveUserToDB(user);
+                        await API.graphql(graphqlOperation(createUser, {input: user}))
+                       
                     } else {
                         console.log("User already exist!");
                     }
+                    //Store user to the redux store
+                    dispatch(storeUser(userData.data.getUser))
                 }
 
             } catch (err) {

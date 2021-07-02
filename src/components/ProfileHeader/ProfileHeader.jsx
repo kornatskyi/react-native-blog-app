@@ -5,6 +5,7 @@ import Avatar from "../Avatar/Avatar";
 import { mainColor } from "../../../constants/style";
 import { TouchableOpacity } from "react-native";
 
+
 import Auth from "@aws-amplify/auth";
 import { useSelector } from "react-redux";
 
@@ -46,14 +47,12 @@ export default function ProfileHeader({ navigation }) {
 
         <TouchableOpacity
           style={styles.titleButton}
-          onPress={() => {
-            logout();
-          }}
         >
           <Text
             style={styles.titleText}
             onPress={() => {
-             
+            console.log('signout');
+            logout();
             }}
           >
             Logout
