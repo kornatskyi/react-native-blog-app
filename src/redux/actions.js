@@ -58,9 +58,10 @@ export const fetchPosts = (userId) => (dispatch) => {
                             { contains: userId }
                     }
                 }))
+                console.log(posts);
                 dispatch(storePosts(posts.data.listPosts.items))
             } catch (err) {
-
+                console.log(err);
                 console.log('error when fetching posts');
             }
         }
@@ -102,8 +103,7 @@ export const editPostSync = (editedPost) => (dispatch) => {
                 const post = await API.graphql(graphqlOperation(updatePost, { input: editedPost }))
                 dispatch(editPostInStore(post.data.updatePost));
             } catch (err) {
-                console.error(err)
-                console.log('cant delete post');
+                console.log('cant edit post');
             }
         }
     )()
@@ -120,10 +120,6 @@ export const storeUserAsync = (user) => (dispatch) => {
                 const userInfo = await Auth.currentAuthenticatedUser({
                     bypassCache: true,
                 });
-
-
-
-
                 if (userInfo) {
                     // Check if user already exists in database
                     const userData = await API.graphql(

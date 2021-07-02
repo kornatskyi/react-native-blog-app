@@ -3,24 +3,56 @@ import { View, StyleSheet } from "react-native";
 import { Text } from "react-native-elements";
 import Avatar from "../Avatar/Avatar";
 import { mainColor } from "../../../constants/style";
+import { TouchableOpacity } from "react-native";
+
+import Auth from "@aws-amplify/auth";
 
 export default function ProfileHeader({ navigation }) {
-  
+  async function logout() {
+    try {
+      await Auth.signOut();
+    } catch (error) {
+      console.log("error signing out: ", error);
+    }
+  }
+
   return (
     <View style={styles.header}>
       <View style={styles.title}>
-        <Text style={styles.titleChild}>Settings</Text>
-        <Text style={styles.titleChild} h3>
-          Profile
-        </Text>
-        <Text
-          style={styles.titleChild}
+        <TouchableOpacity
+          style={styles.titleButton}
           onPress={() => {
-            navigation.navigate("Home");
+            console.log("here should be a settings function ");
           }}
         >
-          Logout
-        </Text>
+          <Text style={styles.titleText}>Settings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.titleButton}
+          onPress={() => {
+            console.log("here should be a profile function ");
+          }}
+        >
+          <Text style={styles.titleText} h3>
+            Profile
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.titleButton}
+          onPress={() => {
+            logout();
+          }}
+        >
+          <Text
+            style={styles.titleText}
+            onPress={() => {
+             
+            }}
+          >
+            Logout
+          </Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.avatarContainer}>
@@ -40,49 +72,6 @@ export default function ProfileHeader({ navigation }) {
   );
 }
 
-const styleShrink = StyleSheet.create({
-  header: {
-    // flex: 0.26,
-    height: 60,
-    backgroundColor: mainColor,
-    marginBottom: 50,
-  },
-  title: {
-    flexDirection: "row",
-    alignItems: "center",
-    top: 20,
-  },
-  titleChild: {
-    flex: 1,
-    textAlign: "center",
-    color: "#fff",
-    fontSize: 18,
-  },
-  avatarContainer: {
-    top: 30,
-    alignItems: "flex-start",
-    left: 10,
-  },
-  avatarImage: {
-    width: 50,
-    height: 50,
-  },
-  nameContainer: {
-    left: 70,
-    top: -10,
-  },
-  name: {
-    fontSize: 17,
-    fontWeight: "bold",
-  },
-  mantraContainer: {
-    display: "none",
-  },
-  mantra: {
-    fontSize: 14,
-  },
-});
-
 const styles = StyleSheet.create({
   header: {
     // flex: 0.26,
@@ -95,10 +84,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     top: 20,
   },
-  titleChild: {
+  titleButton: {
     flex: 1,
-    textAlign: "center",
+    alignItems: "center",
+  },
+  titleText: {
+    // textAlign: "center",
     color: "#fff",
+
     fontSize: 18,
   },
   avatarContainer: {

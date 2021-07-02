@@ -1,7 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 
-
 import TabViewExample from "../../components/Tabs/Tabs";
 
 import Posts from "../../components/Posts/Posts";
@@ -10,7 +9,7 @@ import Photos from "../../components/Photos/Photos";
 
 import ProfileHeader from "../../components/ProfileHeader/ProfileHeader";
 
-export default function Profile({ navigation, extraData }) {
+export default function Profile({ navigation }) {
   return (
     <View style={styles.container}>
       <ProfileHeader navigation={navigation} />

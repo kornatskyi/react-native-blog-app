@@ -25,21 +25,18 @@ import { mainColor } from "../../../constants/style";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPosts } from "../../redux/actions";
 
-export default function Posts(props) {
+export default function Posts() {
   // const [posts, setPosts] = useState(null);
 
   const posts = useSelector((state) => {
     return state.posts.posts;
   });
-  const userId = useSelector(state => state.user.user.id)
-  console.log("🚀 ~ posts", posts)
+  const userId = useSelector((state) => state.user.user.id);
   const dispatch = useDispatch();
 
   //Fetch post from GraphQL
-
-
   useEffect(() => {
-    dispatch(fetchPosts(userId))
+    dispatch(fetchPosts(userId));
   }, []);
 
   if (!posts) {
@@ -53,13 +50,7 @@ export default function Posts(props) {
       <View>
         <ScrollView style={styles.postsContainer}>
           {posts.map((post, i) => {
-            return (
-              <Post
-                key={i}
-                postData={post}
-    
-              />
-            );
+            return <Post key={i} postData={post} />;
           })}
         </ScrollView>
         <NewPostButton />
