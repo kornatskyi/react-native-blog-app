@@ -58,7 +58,6 @@ export const fetchPosts = (userId) => (dispatch) => {
                             { contains: userId }
                     }
                 }))
-                console.log(posts);
                 dispatch(storePosts(posts.data.listPosts.items))
             } catch (err) {
                 console.log(err);
@@ -112,7 +111,7 @@ export const editPostSync = (editedPost) => (dispatch) => {
 
 
 //User middleware
-export const storeUserAsync = (user) => (dispatch) => {
+export const storeUserAsync = () => (dispatch) => {
 
     return (
         async () => {

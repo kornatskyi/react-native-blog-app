@@ -18,7 +18,6 @@ import { editPostSync } from "../../redux/actions";
 
 export default function EditPost({ navigation, route }) {
   const postData = route.params.postData;
-  console.log("🚀 ~ postData", postData)
 
 
   const [title, setTitle] = useState(postData.title);

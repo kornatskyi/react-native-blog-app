@@ -6,11 +6,17 @@ import { mainColor } from "../../../constants/style";
 import { TouchableOpacity } from "react-native";
 
 import Auth from "@aws-amplify/auth";
+import { useSelector } from "react-redux";
 
 export default function ProfileHeader({ navigation }) {
+
+  const user = useSelector(state => state.user.user)
+
+  console.log(user);
   async function logout() {
     try {
       await Auth.signOut();
+     
     } catch (error) {
       console.log("error signing out: ", error);
     }
@@ -58,12 +64,12 @@ export default function ProfileHeader({ navigation }) {
       <View style={styles.avatarContainer}>
         <Avatar
           style={styles.avatarImage}
-          source={require("../../../assets/images/avatar.png")}
+          source={{uri: user.image}}
         />
       </View>
 
       <View style={styles.nameContainer}>
-        <Text style={styles.name}>Victoria Robertson</Text>
+        <Text style={styles.name}>{user.name}</Text>
       </View>
       <View style={styles.mantraContainer}>
         <Text style={styles.mantra}>A mantra goes here</Text>
@@ -102,6 +108,7 @@ const styles = StyleSheet.create({
     width: 135,
     height: 135,
     marginBottom: 50,
+    borderRadius:135
   },
   nameContainer: {
     alignItems: "center",

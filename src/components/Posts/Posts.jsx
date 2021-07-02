@@ -35,7 +35,8 @@ export default function Posts() {
   const dispatch = useDispatch();
 
   //Fetch post from GraphQL
-  useEffect(() => {
+
+  useEffect( () => {
     dispatch(fetchPosts(userId));
   }, []);
 

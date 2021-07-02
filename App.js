@@ -5,62 +5,67 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import MyStack from "./src/navigation/MyStack.jsx";
-
+import Loader from "./src/components/Loader/Loader";
 
 //Styles
 import { mainColor } from "./constants/style";
 
 //Redux
 import { configureStore } from "./src/redux/store.js";
-import { Provider, useDispatch } from 'react-redux'
+import { Provider, useDispatch, useSelector } from "react-redux";
 import { storeUser, storeUserAsync } from "./src/redux/actions.js";
 
 //Amplify related
-import Amplify, {
-  Auth,
-  API,
-  graphqlOperation
-} from "aws-amplify";
+import Amplify, { Auth, API, graphqlOperation } from "aws-amplify";
 
-import { withAuthenticator } from 'aws-amplify-react-native'
+import { withAuthenticator } from "aws-amplify-react-native";
 import config from "./src/aws-exports";
 import { createUser } from "./src/graphql/mutations";
 
-import authenticatorStyles from './styles/authenticatorStyles'
+import authenticatorStyles from "./styles/authenticatorStyles";
+import { Text } from "react-native";
 
 Amplify.configure({
   ...config,
   Analytics: {
     disabled: true,
-  }
+  },
 });
-
 
 const store = configureStore();
 
 function App() {
-  console.log();
+  //Checked user and show loading page while user isn't checked
+  const isUserStored = useSelector((state) => !!state.user.user.id);
 
+  const [isLoader, setLoader] = useState(true);
 
-  const dispatch = useDispatch()
-
-
+  const dispatch = useDispatch();
 
   useEffect(() => {
-
-
-
-    dispatch(storeUserAsync())
+    dispatch(storeUserAsync());
   }, []);
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar animated={true} backgroundColor={mainColor} />
-      <MyStack />
-    </SafeAreaView>
-  );
-}
+  //Set up loader to avoid memory leak
+  useEffect(() => {
+    setLoader(false);
+  }, [isUserStored]);
 
+  if (isUserStored) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <StatusBar animated={true} backgroundColor={mainColor} />
+        <MyStack />
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <View>
+        <Loader visible={isLoader}></Loader>
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -70,17 +75,15 @@ const styles = StyleSheet.create({
   },
 });
 
-
 function ReduxProviderWrapper() {
   return (
     <Provider store={store}>
       <App />
     </Provider>
-  )
+  );
 }
 
 export default withAuthenticator(ReduxProviderWrapper, {
   // customize the UI/styling
-  theme: { ...authenticatorStyles }
-})
-
+  theme: { ...authenticatorStyles },
+});
