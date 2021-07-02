@@ -43,6 +43,12 @@ export function editPostInStore(editedPost) {
     })
 }
 
+export function userLogOut() {
+    return({
+        type: actionTypes.USER_LOGOUT
+    })
+}
+
 //Middleware
 
 
@@ -125,7 +131,6 @@ export const storeUserAsync = () => (dispatch) => {
                     const userData = await API.graphql(
                         graphqlOperation(getUser, { id: userInfo.attributes.sub })
                     );
-                    console.log("🚀 ~ userData", userData)
 
                     if (!userData.data.getUser) {
                         const user = {

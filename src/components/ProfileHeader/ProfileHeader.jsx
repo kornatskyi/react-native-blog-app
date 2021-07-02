@@ -4,6 +4,8 @@ import { Text } from "react-native-elements";
 import Avatar from "../Avatar/Avatar";
 import { mainColor } from "../../../constants/style";
 import { TouchableOpacity } from "react-native";
+import { useDispatch } from "react-redux";
+import { userLogOut } from "../../redux/actions";
 
 
 import Auth from "@aws-amplify/auth";
@@ -12,8 +14,8 @@ import { useSelector } from "react-redux";
 export default function ProfileHeader({ navigation }) {
 
   const user = useSelector(state => state.user.user)
+  const dispatch = useDispatch();
 
-  console.log(user);
   async function logout() {
     try {
       await Auth.signOut();
@@ -51,8 +53,9 @@ export default function ProfileHeader({ navigation }) {
           <Text
             style={styles.titleText}
             onPress={() => {
-            console.log('signout');
+          
             logout();
+            dispatch(userLogOut())
             }}
           >
             Logout

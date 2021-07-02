@@ -1,17 +1,14 @@
-import postsReducer from './reducers/posts'
-import userReducer from './reducers/user'
+
 import thunk from 'redux-thunk'
 import logger from 'redux-logger'
 import { applyMiddleware, createStore, combineReducers } from 'redux'
+import rootReducer from './reducers/rootReducer'
 
 
 
 export const configureStore = () => {
   const store = createStore(
-    combineReducers({
-      posts: postsReducer,
-      user: userReducer
-    }),
+    rootReducer,
     applyMiddleware(thunk,)
   )
   return store;
