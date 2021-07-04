@@ -5,6 +5,7 @@ import Profile from "../screens/Profile/Profile.jsx";
 import Blog from "../screens/Blog/Blog.jsx";
 import NewPost from "../screens/NewPost/NewPost.jsx";
 import EditPost from "../screens/EditPost/EditPost.jsx";
+import ProfileSettings from "../screens/ProfileSettings/ProfileSettings.jsx";
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,12 @@ const MyStack = () => {
           name="EditPost"
           component={EditPost}
           options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="ProfileSettings"
+          component={ProfileSettings}
+          options={{ title: 'Profile settings' }}
         />
 
         <Stack.Screen name="Blog" component={Blog} />

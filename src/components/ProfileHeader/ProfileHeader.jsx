@@ -31,7 +31,7 @@ export default function ProfileHeader({ navigation }) {
         <TouchableOpacity
           style={styles.titleButton}
           onPress={() => {
-            console.log("here should be a settings function ");
+            navigation.navigate("ProfileSettings")
           }}
         >
           <Text style={styles.titleText}>Settings</Text>
