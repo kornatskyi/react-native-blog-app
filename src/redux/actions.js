@@ -144,6 +144,7 @@ export const storeUserAsync = () => (dispatch) => {
                     } else {
                         console.log("User already exist!");
                     }
+                    
                     //Store user to the redux store
                     dispatch(storeUser(userData.data.getUser))
                 }

@@ -13,7 +13,7 @@ import { mainColor } from "./constants/style";
 //Redux
 import { configureStore } from "./src/redux/store.js";
 import { Provider, useDispatch, useSelector } from "react-redux";
-import { storeUser, storeUserAsync } from "./src/redux/actions.js";
+import { storeUserAsync } from "./src/redux/actions.js";
 
 //Amplify related
 import Amplify, { Auth, API, graphqlOperation } from "aws-amplify";
