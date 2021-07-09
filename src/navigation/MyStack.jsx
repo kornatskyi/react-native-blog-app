@@ -6,6 +6,7 @@ import Blog from "../screens/Blog/Blog.jsx";
 import NewPost from "../screens/NewPost/NewPost.jsx";
 import EditPost from "../screens/EditPost/EditPost.jsx";
 import ProfileSettings from "../screens/ProfileSettings/ProfileSettings.jsx";
+import ChangeCredential from "../screens/ChangeCredential/ChangeCredential.jsx";
 
 const Stack = createStackNavigator();
 
@@ -32,7 +33,13 @@ const MyStack = () => {
         <Stack.Screen
           name="ProfileSettings"
           component={ProfileSettings}
-          options={{ title: 'Profile settings' }}
+          options={{ title: "Profile settings" }}
+        />
+
+        <Stack.Screen
+          name="ChangeCredential"
+          component={ChangeCredential}
+          options={({ route }) => ({ title: route.params.title })}
         />
 
         <Stack.Screen name="Blog" component={Blog} />

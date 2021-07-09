@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   SafeAreaView,
   StyleSheet,
   TextInput,
   Button,
+  TouchableOpacity,
 } from "react-native";
 import { ListItem, Text } from "react-native-elements";
 import { useSelector } from "react-redux";
 
-export default function ProfileSettings() {
+export default function ProfileSettings({ navigation }) {
+  const changeCredential = (credentialName) => {
+    // navigation.setParams({ title: "Hello" });
+    navigation.navigate("ChangeCredential", { title: credentialName });
+  };
+
   const [text, onChangeText] = React.useState("Useless Text");
 
   const [changeName, setChangeName] = useState(false);
@@ -22,18 +28,37 @@ export default function ProfileSettings() {
         if (!changeName) {
           return (
             <View>
-              <Text style={styles.title} >Login and security</Text>
-              <ListItem  bottomDivider>
-                <ListItem.Title>Username</ListItem.Title>
-                <ListItem.Subtitle>{user.name}</ListItem.Subtitle>
-              </ListItem>
-              <ListItem  bottomDivider>
-                <ListItem.Title>Email</ListItem.Title>
-                <ListItem.Subtitle>{user.email}</ListItem.Subtitle>
-              </ListItem>
-              <ListItem  bottomDivider>
-                <ListItem.Title>Password</ListItem.Title>
-              </ListItem>
+              <Text style={styles.title}>Login and security</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  changeCredential("Change Username");
+                }}
+              >
+                <ListItem bottomDivider>
+                  <ListItem.Title>Username</ListItem.Title>
+                  <ListItem.Subtitle>{user.name}</ListItem.Subtitle>
+                </ListItem>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => {
+                  changeCredential("Change Email");
+                }}
+              >
+                <ListItem bottomDivider>
+                  <ListItem.Title>Email</ListItem.Title>
+                  <ListItem.Subtitle>{user.email}</ListItem.Subtitle>
+                </ListItem>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  changeCredential("Change Password");
+                }}
+              >
+                <ListItem bottomDivider>
+                  <ListItem.Title>Password</ListItem.Title>
+                </ListItem>
+              </TouchableOpacity>
             </View>
           );
         } else {
@@ -45,17 +70,15 @@ export default function ProfileSettings() {
           );
         }
       })()}
-
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   title: {
-    fontWeight: 'bold',
-    fontSize:18,
-    padding:10
+    fontWeight: "bold",
+    fontSize: 18,
+    padding: 10,
   },
   input: {
     height: 40,
