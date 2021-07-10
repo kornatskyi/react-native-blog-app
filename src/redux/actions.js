@@ -131,7 +131,7 @@ export const storeUserAsync = () => (dispatch) => {
                     const userData = await API.graphql(
                         graphqlOperation(getUser, { id: userInfo.attributes.sub })
                     );
-
+                   
                     if (!userData.data.getUser) {
                         const user = {
                             id: userInfo.attributes.sub,

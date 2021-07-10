@@ -8,8 +8,8 @@
           "defaultAuthentication": {
             "authenticationType": "API_KEY",
             "apiKeyConfig": {
-              "apiKeyExpirationDays": 7,
-              "description": "blog by kornatskyi"
+              "apiKeyExpirationDays": 14,
+              "description": "newkey"
             }
           },
           "additionalAuthenticationProviders": []
