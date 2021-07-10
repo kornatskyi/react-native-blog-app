@@ -10,6 +10,7 @@ import { createUser } from '../graphql/mutations';
 
 //User Actions
 export function storeUser(user) {
+    console.log("🚀 ~ user", user)
     return ({
         type: actionTypes.STORE_USER,
         payload: user
@@ -57,6 +58,7 @@ export const fetchPosts = (userId) => (dispatch) => {
 
     return (
         async () => {
+            
             try {
                 const posts = await API.graphql(graphqlOperation(listPosts, {
                     filter: {
@@ -66,7 +68,7 @@ export const fetchPosts = (userId) => (dispatch) => {
                 }))
                 dispatch(storePosts(posts.data.listPosts.items))
             } catch (err) {
-                console.log(err);
+                // console.log(err);
                 console.log('error when fetching posts');
             }
         }
@@ -91,6 +93,7 @@ export const deletePostSync = (id) => (dispatch) => {
     return (
         async () => {
             try {
+                
                 await API.graphql(graphqlOperation(deletePost, { input: { id: id } }))
                 dispatch(deletePostFromStore(id));
             } catch (err) {
@@ -126,15 +129,21 @@ export const storeUserAsync = () => (dispatch) => {
                     bypassCache: true,
                 });
                 
+
+                
                 if (userInfo) {
                     // Check if user already exists in database
+                    console.log("🚀 ~ userData", userInfo.signInUserSession.accessToken.payload.sub)
                     const userData = await API.graphql(
-                        graphqlOperation(getUser, { id: userInfo.attributes.sub })
+                        graphqlOperation(getUser, { id: userInfo.signInUserSession.accessToken.payload.sub })
                     );
+                    
+
+                    
                    
                     if (!userData.data.getUser) {
                         const user = {
-                            id: userInfo.attributes.sub,
+                            id: userInfo.signInUserSession.accessToken.payload.sub,
                             name: userInfo.username,
                             email: userInfo.attributes.email,
                             image: 'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png',

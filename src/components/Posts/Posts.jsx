@@ -31,10 +31,13 @@ export default function Posts() {
   const posts = useSelector((state) => {
     return state.posts.posts;
   });
+  
+  
   const userId = useSelector((state) => state.user.user.id);
   const dispatch = useDispatch();
 
   //Fetch post from GraphQL
+
 
   useEffect( () => {
     dispatch(fetchPosts(userId));

@@ -32,6 +32,7 @@ Amplify.configure({
   },
 });
 
+
 const store = configureStore();
 
 function App() {

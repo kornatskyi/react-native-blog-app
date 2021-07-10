@@ -25,6 +25,7 @@ export default function ProfileHeader({ navigation }) {
     }
   }
 
+  
   return (
     <View style={styles.header}>
       <View style={styles.title}>
