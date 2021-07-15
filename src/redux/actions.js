@@ -45,7 +45,7 @@ export function editPostInStore(editedPost) {
 }
 
 export function userLogOut() {
-    return({
+    return ({
         type: actionTypes.USER_LOGOUT
     })
 }
@@ -58,7 +58,7 @@ export const fetchPosts = (userId) => (dispatch) => {
 
     return (
         async () => {
-            
+
             try {
                 const posts = await API.graphql(graphqlOperation(listPosts, {
                     filter: {
@@ -92,9 +92,10 @@ export const postPost = (postData) => (dispatch) => {
 export const deletePostSync = (id) => (dispatch) => {
     return (
         async () => {
+            console.log("🚀 ~ id", id)
             try {
-                
-                await API.graphql(graphqlOperation(deletePost, { input: { id: id } }))
+
+                await API.graphql(graphqlOperation(deletePost, { input: { id: id, _version: 4 } }))
                 dispatch(deletePostFromStore(id));
             } catch (err) {
                 console.error(err)
@@ -128,19 +129,19 @@ export const storeUserAsync = () => (dispatch) => {
                 const userInfo = await Auth.currentAuthenticatedUser({
                     bypassCache: true,
                 });
-                
 
-                
+
+
                 if (userInfo) {
                     // Check if user already exists in database
                     console.log("🚀 ~ userData", userInfo.signInUserSession.accessToken.payload.sub)
                     const userData = await API.graphql(
                         graphqlOperation(getUser, { id: userInfo.signInUserSession.accessToken.payload.sub })
                     );
-                    
 
-                    
-                   
+
+
+
                     if (!userData.data.getUser) {
                         const user = {
                             id: userInfo.signInUserSession.accessToken.payload.sub,
@@ -148,12 +149,12 @@ export const storeUserAsync = () => (dispatch) => {
                             email: userInfo.attributes.email,
                             image: 'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png',
                         };
-                        await API.graphql(graphqlOperation(createUser, {input: user}))
-                       
+                        await API.graphql(graphqlOperation(createUser, { input: user }))
+
                     } else {
                         console.log("User already exist!");
                     }
-                    
+
                     //Store user to the redux store
                     dispatch(storeUser(userData.data.getUser))
                 }
