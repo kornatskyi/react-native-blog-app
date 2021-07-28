@@ -52,7 +52,7 @@ function App() {
     setLoader(false);
   }, [isUserStored]);
 
-  if (isUserStored) {
+  if (true) {
     return (
       <SafeAreaView style={styles.container}>
         <StatusBar animated={true} backgroundColor={mainColor} />

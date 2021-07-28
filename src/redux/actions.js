@@ -10,7 +10,6 @@ import { createUser } from '../graphql/mutations';
 
 //User Actions
 export function storeUser(user) {
-    console.log("🚀 ~ user", user)
     return ({
         type: actionTypes.STORE_USER,
         payload: user
@@ -60,12 +59,14 @@ export const fetchPosts = (userId) => (dispatch) => {
         async () => {
 
             try {
+                console.log("🚀 ~ userId action", userId)
                 const posts = await API.graphql(graphqlOperation(listPosts, {
                     filter: {
                         userId:
                             { contains: userId }
                     }
                 }))
+                console.log("🚀 ~ posts", posts)
                 dispatch(storePosts(posts.data.listPosts.items))
             } catch (err) {
                 // console.log(err);
@@ -95,7 +96,7 @@ export const deletePostSync = (id) => (dispatch) => {
             console.log("🚀 ~ id", id)
             try {
 
-                await API.graphql(graphqlOperation(deletePost, { input: { id: id, _version: 4 } }))
+                await API.graphql(graphqlOperation(deletePost, { input: { id: id} }))
                 dispatch(deletePostFromStore(id));
             } catch (err) {
                 console.error(err)
@@ -134,10 +135,11 @@ export const storeUserAsync = () => (dispatch) => {
 
                 if (userInfo) {
                     // Check if user already exists in database
-                    console.log("🚀 ~ userData", userInfo.signInUserSession.accessToken.payload.sub)
+
                     const userData = await API.graphql(
                         graphqlOperation(getUser, { id: userInfo.signInUserSession.accessToken.payload.sub })
                     );
+
 
 
 
