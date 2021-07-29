@@ -36,9 +36,9 @@ export default function ChangeCredential({ route, navigation }) {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {
-          dispatch(updateUserName(credential));
-          dispatch(storeUserAsync());
+        onPress={ async () => {
+          await dispatch(updateUserName(credential));
+          await dispatch(storeUserAsync());
 
           navigation.goBack(null)
         }}
