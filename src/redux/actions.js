@@ -2,7 +2,7 @@ import * as actionTypes from './actionTypes'
 
 //Amplify related
 import { API, graphqlOperation, Auth } from "aws-amplify";
-import { createPost, deletePost, updatePost } from "../graphql/mutations";
+import { createPost, deletePost, updatePost, updateUser } from "../graphql/mutations";
 import { listPosts, getUser } from '../graphql/queries';
 import { createUser } from '../graphql/mutations';
 
@@ -59,14 +59,12 @@ export const fetchPosts = (userId) => (dispatch) => {
         async () => {
 
             try {
-                console.log("🚀 ~ userId action", userId)
                 const posts = await API.graphql(graphqlOperation(listPosts, {
                     filter: {
                         userId:
                             { contains: userId }
                     }
                 }))
-                console.log("🚀 ~ posts", posts)
                 dispatch(storePosts(posts.data.listPosts.items))
             } catch (err) {
                 // console.log(err);
@@ -96,7 +94,7 @@ export const deletePostSync = (id) => (dispatch) => {
             console.log("🚀 ~ id", id)
             try {
 
-                await API.graphql(graphqlOperation(deletePost, { input: { id: id} }))
+                await API.graphql(graphqlOperation(deletePost, { input: { id: id } }))
                 dispatch(deletePostFromStore(id));
             } catch (err) {
                 console.error(err)
@@ -169,6 +167,53 @@ export const storeUserAsync = () => (dispatch) => {
         }
     )()
 
+
+}
+
+
+export const updateUserName = (name) => (dispatch) => {
+
+    return (
+        async () => {
+            try {
+                const userInfo = await Auth.currentAuthenticatedUser({
+                    bypassCache: true,
+                });
+
+
+
+
+                const userData = await API.graphql(
+                    graphqlOperation(getUser, { id: userInfo.signInUserSession.accessToken.payload.sub }))
+                console.log("🚀 ~ userData", userData.data.getUser.id)
+
+
+                await API.graphql(graphqlOperation(updateUser, { input: { id: "0c849017-b1c1-410d-98bb-2fa1fb6e6cb5",  name: name}}))
+
+                //     if (!userData.data.getUser) {
+                //         const user = {
+                //             id: userInfo.signInUserSession.accessToken.payload.sub,
+                //             name: userInfo.username,
+                //             email: userInfo.attributes.email,
+                //             image: 'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png',
+                //         };
+                //         await API.graphql(graphqlOperation(createUser, { input: user }))
+
+                //     } else {
+                //         console.log("User already exist!");
+                //     }
+
+                //     //Store user to the redux store
+                //     dispatch(storeUser(userData.data.getUser))
+                // }
+
+            } catch (err) {
+                console.log("🚀 ~ err", err)
+                console.log('error when saving user');
+
+            }
+        }
+    )()
 
 }
 

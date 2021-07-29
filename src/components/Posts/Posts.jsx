@@ -33,7 +33,6 @@ export default function Posts() {
   });
 
   const userId = useSelector((state) => state.user.user.id);
-  console.log("🚀 ~ userId", userId);
 
   const dispatch = useDispatch();
 

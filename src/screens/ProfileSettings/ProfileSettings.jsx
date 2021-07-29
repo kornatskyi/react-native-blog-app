@@ -11,9 +11,13 @@ import { ListItem, Text } from "react-native-elements";
 import { useSelector } from "react-redux";
 
 export default function ProfileSettings({ navigation }) {
-  const changeCredential = (credentialName) => {
+  const changeCredential = (credentialType, credentialName, credential) => {
     // navigation.setParams({ title: "Hello" });
-    navigation.navigate("ChangeCredential", { title: credentialName });
+    navigation.navigate("ChangeCredential", {
+      title: credentialName,
+      credential: credential,
+      credentialType: credentialType,
+    });
   };
 
   const [text, onChangeText] = React.useState("Useless Text");
@@ -21,6 +25,9 @@ export default function ProfileSettings({ navigation }) {
   const [changeName, setChangeName] = useState(false);
 
   const user = useSelector((state) => state.user.user);
+
+  
+  console.log(user);
 
   return (
     <View>
@@ -31,7 +38,7 @@ export default function ProfileSettings({ navigation }) {
               <Text style={styles.title}>Login and security</Text>
               <TouchableOpacity
                 onPress={() => {
-                  changeCredential("Change Username");
+                  changeCredential("username", "Change Username", user.name);
                 }}
               >
                 <ListItem bottomDivider>
@@ -42,7 +49,7 @@ export default function ProfileSettings({ navigation }) {
 
               <TouchableOpacity
                 onPress={() => {
-                  changeCredential("Change Email");
+                  changeCredential("email", "Change Email", user.email);
                 }}
               >
                 <ListItem bottomDivider>
@@ -52,7 +59,7 @@ export default function ProfileSettings({ navigation }) {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  changeCredential("Change Password");
+                  changeCredential("password", "Change Password", "password");
                 }}
               >
                 <ListItem bottomDivider>
