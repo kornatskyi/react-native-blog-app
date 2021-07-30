@@ -26,9 +26,6 @@ export default function ProfileSettings({ navigation }) {
 
   const user = useSelector((state) => state.user.user);
 
-  
-  console.log(user);
-
   return (
     <View>
       {(() => {

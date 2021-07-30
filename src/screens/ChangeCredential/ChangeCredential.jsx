@@ -8,12 +8,30 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { mainColor } from "../../../constants/style";
-import { storeUserAsync, updateUserName } from "../../redux/actions";
-
+import { storeUserAsync, updateUserName, updateEmail } from "../../redux/actions";
 
 export default function ChangeCredential({ route, navigation }) {
   const [credential, setCredential] = useState(route.params.credential);
   const dispatch = useDispatch();
+
+  const updateCredential = async (c) => {
+    switch (route.params.credentialType) {
+      case 'username':
+        await dispatch(updateUserName(c));
+
+        break;
+      case 'email':
+        await dispatch(updateEmail(c));
+        break;
+
+      default:
+        break;
+    }
+    await dispatch(storeUserAsync());
+
+    navigation.goBack(null);
+  };
+
   return (
     <View style={styles.container}>
       <View>
@@ -36,11 +54,8 @@ export default function ChangeCredential({ route, navigation }) {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={ async () => {
-          await dispatch(updateUserName(credential));
-          await dispatch(storeUserAsync());
-
-          navigation.goBack(null)
+        onPress={() => {
+          updateCredential(credential);
         }}
       >
         <Text style={styles.buttonText}>Done</Text>
