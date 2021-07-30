@@ -152,8 +152,10 @@ export const storeUserAsync = () => (dispatch) => {
                         await API.graphql(graphqlOperation(createUser, { input: user }))
 
                     } else {
+
                         console.log("User already exist!");
                     }
+
 
                     //Store user to the redux store
                     dispatch(storeUser(userData.data.getUser))
@@ -173,9 +175,6 @@ export const storeUserAsync = () => (dispatch) => {
 
 export const updateUserName = (name) => (dispatch) => {
 
-
-
-
     return (
         async () => {
             try {
@@ -184,16 +183,7 @@ export const updateUserName = (name) => (dispatch) => {
                 });
 
 
-
-
-                const userData = await API.graphql(
-                    graphqlOperation(getUser, { id: userInfo.signInUserSession.accessToken.payload.sub }))
-
-
-                await API.graphql(graphqlOperation(updateUser, { input: { id: "0c849017-b1c1-410d-98bb-2fa1fb6e6cb5", name: name } }))
-
-
-
+                await API.graphql(graphqlOperation(updateUser, { input: { id: userInfo.signInUserSession.accessToken.payload.sub, name: name } }))
             } catch (err) {
                 console.log("🚀 ~ err", err)
                 console.log('error when updating user name');
@@ -205,12 +195,8 @@ export const updateUserName = (name) => (dispatch) => {
 }
 
 export const updateEmail = (email) => (dispatch) => {
+    console.log("🚀 ~ email", email)
 
-    async function getUserInfo() {
-        const user = await Auth.currentAuthenticatedUser();
-        console.log('attributes:', user.attributes);
-      }
-      getUserInfo()
 
     return (
         async () => {
@@ -219,17 +205,22 @@ export const updateEmail = (email) => (dispatch) => {
                     bypassCache: true,
                 });
 
-         
-
-                // const userData = await API.graphql(
-                //     graphqlOperation(getUser, { id: userInfo.signInUserSession.accessToken.payload.sub }))
-                // await API.graphql(graphqlOperation(updateUser, { input: { id: "0c849017-b1c1-410d-98bb-2fa1fb6e6cb5", email: email } }))
-
-
                 await Auth.updateUserAttributes(userInfo, {
                     'email': email
-                  });
-  
+                });
+
+
+                await API.graphql(graphqlOperation(updateUser, {
+                    input:
+                    {
+                        id: userInfo.signInUserSession.accessToken.payload.sub,
+                        email: email
+                    }
+                }))
+
+
+
+                // storeUserAsync()
 
             } catch (err) {
                 console.log("🚀 ~ err", err)
